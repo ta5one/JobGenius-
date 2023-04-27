@@ -9,8 +9,17 @@ import {
   Grid,
 } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
-import { Card, CardContent, CardHeader, CardMedia } from "@mui/material"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Rating,
+  Avatar,
+} from "@mui/material"
+
 import backgroundImg from "../../assets/images/mountain.jpg"
+import asideImg from "../../assets/images/laptop.jpg"
 
 export default function Homepage() {
   return (
@@ -31,7 +40,12 @@ export default function Homepage() {
       >
         <Typography
           variant="h2"
-          sx={{ color: "white", textAlign: "center", marginBottom: "2rem" }}
+          sx={{
+            color: "white",
+            textAlign: "center",
+            marginBottom: "2rem",
+            backgroundColor: "rgba(0, 0, 0, 0.3)",
+          }}
         >
           Find the right service, right away
         </Typography>
@@ -46,13 +60,17 @@ export default function Homepage() {
           <TextField
             variant="outlined"
             placeholder="Search for services..."
-            fullWidth
             size="small"
             sx={{
               marginRight: "1rem",
               width: "1000px",
-              backgroundColor: "white",
-              color: "black",
+              "& .MuiOutlinedInput-root": {
+                backgroundColor: "white",
+              },
+              "& .MuiOutlinedInput-input": {
+                color: "black",
+                padding: "10px",
+              },
             }}
           />
           <Button
@@ -60,79 +78,117 @@ export default function Homepage() {
             color="primary"
             size="large"
             startIcon={<SearchIcon />}
+            sx={{
+              backgroundColor: "#4caf50",
+              "&:hover": {
+                backgroundColor: "#8dfc8f",
+              },
+            }}
           >
             Search
           </Button>
         </Box>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={4}>
-            <Button
-              fullWidth
-              variant="outlined"
-              color="primary"
-              sx={{
-                backgroundColor: "white",
-                color: "black",
-                "&:hover": {
-                  backgroundColor: "white",
-                  opacity: 0.9,
-                },
-              }}
-            >
-              Suggestion 1
-            </Button>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Button
-              fullWidth
-              variant="outlined"
-              color="primary"
-              sx={{
-                backgroundColor: "white",
-                color: "black",
-                "&:hover": {
-                  backgroundColor: "white",
-                  opacity: 0.9,
-                },
-              }}
-            >
-              Suggestion 2
-            </Button>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Button
-              fullWidth
-              variant="outlined"
-              color="primary"
-              sx={{
-                backgroundColor: "white",
-                color: "black",
-                "&:hover": {
-                  backgroundColor: "white",
-                  opacity: 0.9,
-                },
-              }}
-            >
-              Suggestion 3
-            </Button>
-          </Grid>
-        </Grid>
-      </Box>
-      <Box sx={{ marginTop: "2rem" }}>
-        <Typography
-          variant="h4"
-          align="center"
-          gutterBottom
-          sx={{ textAlign: "start" }}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            flexWrap: "wrap",
+          }}
         >
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            sx={{
+              backgroundColor: "white",
+              borderRadius: "5px",
+              paddingBottom: "16px",
+              marginRight: "16px",
+            }}
+          >
+            <Grid item xs={12} sm={2}>
+              <Typography
+                fontSize={"16px"}
+                align="right"
+                sx={{ color: "#black" }}
+              >
+                Recent:
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <Button
+                fullWidth
+                variant="text"
+                color="primary"
+                sx={{
+                  backgroundColor: "white",
+                  color: "black",
+                  padding: "0 10px 0 10px",
+                  "&:hover": {
+                    backgroundColor: "white",
+                    opacity: 0.9,
+                  },
+                }}
+              >
+                Suggestion1
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <Button
+                fullWidth
+                variant="text"
+                color="primary"
+                sx={{
+                  backgroundColor: "white",
+                  color: "black",
+                  padding: "0 10px 0 10px",
+                  "&:hover": {
+                    backgroundColor: "white",
+                    opacity: 0.9,
+                  },
+                }}
+              >
+                Suggestion2
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <Button
+                fullWidth
+                variant="text"
+                color="primary"
+                sx={{
+                  backgroundColor: "white",
+                  color: "black",
+                  padding: "0 10px 0 10px",
+                  "&:hover": {
+                    backgroundColor: "white",
+                    opacity: 0.9,
+                  },
+                }}
+              >
+                Suggestion3
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          marginTop: "2rem",
+          padding: "20px",
+          marginRight: "-10px",
+        }}
+      >
+        <Typography variant="h4" align="center" gutterBottom>
           Popular Services
         </Typography>
-        <Grid container spacing={2} justifyContent="center">
+        <Grid container spacing={4} justifyContent="center">
           {Array.from({ length: 6 }, (_, i) => (
             <Grid item xs={12} sm={4} md={4} key={i}>
               <Card>
                 <CardHeader title={`Service ${i + 1}`} />
                 <CardMedia
+                  sx={{ marginLeft: "0px" }}
                   component="img"
                   height="140"
                   image="https://via.placeholder.com/150"
@@ -146,8 +202,10 @@ export default function Homepage() {
           ))}
         </Grid>
       </Box>
-      <Box sx={{ marginTop: "2rem", backgroundColor: "#f5f5f5" }}>
-        <Grid container spacing={2}>
+      <Box
+        sx={{ marginTop: "2rem", backgroundColor: "#f5f5f5", padding: "20px" }}
+      >
+        <Grid container spacing={2} justifyContent="space-between">
           <Grid item xs={12} sm={6}>
             <Typography variant="h4" gutterBottom sx={{ textAlign: "start" }}>
               What JobGenius Offers
@@ -166,14 +224,47 @@ export default function Homepage() {
               business online.
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={4}>
             <img
-              src="https://via.placeholder.com/300"
+              src={asideImg}
               alt="JobGenius Features"
               width="100%"
               style={{ maxWidth: "500px" }}
             />
           </Grid>
+        </Grid>
+      </Box>
+      <Box sx={{ marginTop: "2rem", marginBottom: "20px" }}>
+        <Typography variant="h4" align="center" gutterBottom>
+          Customer Reviews
+        </Typography>
+        <Grid container spacing={2} justifyContent="center">
+          {Array.from({ length: 3 }, (_, i) => (
+            <Grid item xs={12} sm={4} key={i}>
+              <Card>
+                <CardHeader
+                  avatar={
+                    <Avatar
+                      src={`https://via.placeholder.com/150?text=Avatar+${
+                        i + 1
+                      }`}
+                      alt={`Reviewer ${i + 1}`}
+                    />
+                  }
+                  title={`Reviewer ${i + 1}`}
+                />
+                <CardContent>
+                  <Rating value={5} readOnly />
+                  <Typography variant="body1">
+                    My experience with JobGenius was fantastic! I found the
+                    perfect service provider for my needs and the whole process
+                    was smooth and hassle-free. I highly recommend JobGenius to
+                    anyone looking for quality services.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
         </Grid>
       </Box>
     </Container>
