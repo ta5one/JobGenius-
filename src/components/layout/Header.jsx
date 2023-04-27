@@ -1,0 +1,17 @@
+import React from "react"
+import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material"
+
+export default function Header() {
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <Box display="flex" flexGrow={1}>
+          <Typography variant="h6">JobGenius</Typography>
+        </Box>
+        <Button color="inherit">Services</Button>
+        <Button color="inherit">Login</Button>
+        <Button color="inherit">Signup</Button>
+      </Toolbar>
+    </AppBar>
+  )
+}
