@@ -9,8 +9,7 @@ export default function Header() {
           <Typography variant="h6">JobGenius</Typography>
         </Box>
         <Button color="inherit">Services</Button>
-        <Button color="inherit">Login</Button>
-        <Button color="inherit">Signup</Button>
+        <Button color="inherit">Login/Signup</Button>
       </Toolbar>
     </AppBar>
   )
