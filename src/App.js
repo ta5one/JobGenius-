@@ -5,6 +5,7 @@ import Homepage from "./pages/home/Homepage"
 
 import Login from "./auth/Login"
 import Layout from "./Layout/Layout"
+import SignUp from "./auth/Signup"
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             }
           />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
         </Routes>
       </div>
     </Router>

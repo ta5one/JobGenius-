@@ -1,20 +1,16 @@
 import React from "react"
 import { Button, TextField, Grid, Typography, Container } from "@mui/material"
 import { Link as RouterLink } from "react-router-dom"
-
 import Avatar from "@mui/material/Avatar"
 import CssBaseline from "@mui/material/CssBaseline"
-
 import FormControlLabel from "@mui/material/FormControlLabel"
 import Checkbox from "@mui/material/Checkbox"
 import Link from "@mui/material/Link"
-
 import Paper from "@mui/material/Paper"
 import Box from "@mui/material/Box"
-
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
-
 import { createTheme, ThemeProvider } from "@mui/material/styles"
+import coffImg from "../assets/images/coffeelaptop.jpg"
 
 function Copyright(props) {
   return (
@@ -26,7 +22,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        JobGenius
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -56,7 +52,7 @@ export default function Login() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundImage: `url(${coffImg})`,
             backgroundRepeat: "no-repeat",
             backgroundColor: t =>
               t.palette.mode === "light"
