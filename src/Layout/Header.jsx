@@ -1,5 +1,6 @@
 import React from "react"
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material"
+import { Link } from "react-router-dom"
 
 export default function Header() {
   return (
@@ -12,7 +13,9 @@ export default function Header() {
           <Typography variant="h6">JobGenius</Typography>
         </Box>
         <Button color="inherit">Services</Button>
-        <Button color="inherit">Login/Signup</Button>
+        <Link to="/login" style={{ textDecoration: "none", color: "inherit" }}>
+          <Button color="inherit">Login/Signup</Button>
+        </Link>
       </Toolbar>
     </AppBar>
   )
