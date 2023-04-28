@@ -5,13 +5,14 @@ import CssBaseline from "@mui/material/CssBaseline"
 import TextField from "@mui/material/TextField"
 import FormControlLabel from "@mui/material/FormControlLabel"
 import Checkbox from "@mui/material/Checkbox"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Grid from "@mui/material/Grid"
 import Box from "@mui/material/Box"
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
 import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
+import axios from "axios"
 
 function Copyright(props) {
   return (
@@ -34,13 +35,25 @@ function Copyright(props) {
 const theme = createTheme()
 
 export default function SignUp() {
-  const handleSubmit = event => {
+  const navigate = useNavigate()
+  const handleSubmit = async event => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    })
+
+    try {
+      const response = await axios.post("http://localhost:8080/api/register", {
+        firstName: data.get("firstName"),
+        lastName: data.get("lastName"),
+        email: data.get("email"),
+        password: data.get("password"),
+      })
+
+      console.log("User registered:", response.data)
+
+      navigate("/login")
+    } catch (error) {
+      console.error("Error registering user:", error)
+    }
   }
 
   return (
