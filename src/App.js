@@ -2,8 +2,9 @@ import React from "react"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import "./App.css"
 import Homepage from "./pages/home/Homepage"
-import Header from "./components/layout/Header"
-import Footer from "./components/layout/Footer"
+
+import Login from "./auth/Login"
+import Layout from "./Layout/Layout"
 
 function App() {
   return (
@@ -12,11 +13,17 @@ function App() {
         className="App"
         style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
-        <Header />
         <Routes>
-          <Route path="/" element={<Homepage />} />
+          <Route
+            path="/"
+            element={
+              <Layout>
+                <Homepage />
+              </Layout>
+            }
+          />
+          <Route path="/login" element={<Login />} />
         </Routes>
-        <Footer />
       </div>
     </Router>
   )

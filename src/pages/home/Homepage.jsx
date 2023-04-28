@@ -19,7 +19,6 @@ import {
 } from "@mui/material"
 
 import backgroundImg from "../../assets/images/mountain.jpg"
-import asideImg from "../../assets/images/laptop.jpg"
 
 export default function Homepage() {
   return (
@@ -225,12 +224,15 @@ export default function Homepage() {
             </Typography>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <img
-              src={asideImg}
-              alt="JobGenius Features"
-              width="100%"
-              style={{ maxWidth: "500px" }}
-            />
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/YA400nwQhLE"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
           </Grid>
         </Grid>
       </Box>
