@@ -6,6 +6,7 @@ import Homepage from "./pages/home/Homepage"
 import Login from "./auth/Login"
 import Layout from "./Layout/Layout"
 import SignUp from "./auth/Signup"
+import { AuthProvider } from "./contexts/AuthContext"
 
 function App() {
   return (
@@ -14,18 +15,20 @@ function App() {
         className="App"
         style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Layout>
-                <Homepage />
-              </Layout>
-            }
-          />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Layout>
+                  <Homepage />
+                </Layout>
+              }
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+          </Routes>
+        </AuthProvider>
       </div>
     </Router>
   )
