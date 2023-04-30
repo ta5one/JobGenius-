@@ -1,8 +1,12 @@
 import React from "react"
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material"
 import { Link } from "react-router-dom"
+import { useAuth } from "../contexts/AuthContext"
 
 export default function Header() {
+  const { isAuthenticated, user, logout } = useAuth()
+  console.log("isAuthenticated:", isAuthenticated)
+
   return (
     <AppBar
       position="static"
@@ -12,10 +16,25 @@ export default function Header() {
         <Box display="flex" flexGrow={1}>
           <Typography variant="h6">JobGenius</Typography>
         </Box>
-        <Button color="inherit">Services</Button>
-        <Link to="/login" style={{ textDecoration: "none", color: "inherit" }}>
-          <Button color="inherit">Login/Signup</Button>
-        </Link>
+        {isAuthenticated ? (
+          <>
+            <Button color="inherit">Add a Service</Button>
+            <Button color="inherit">Services</Button>
+            <Button color="inherit" onClick={logout}>
+              Logout
+            </Button>
+            <Typography variant="subtitle1">
+              Hello, {user && user.first_name} {user && user.last_name}
+            </Typography>
+          </>
+        ) : (
+          <Link
+            to="/login"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <Button color="inherit">Login/Signup</Button>
+          </Link>
+        )}
       </Toolbar>
     </AppBar>
   )

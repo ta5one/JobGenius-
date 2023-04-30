@@ -48,8 +48,6 @@ export default function SignUp() {
         password: data.get("password"),
       })
 
-      console.log("User registered:", response.data)
-
       navigate("/login")
     } catch (error) {
       console.error("Error registering user:", error)
