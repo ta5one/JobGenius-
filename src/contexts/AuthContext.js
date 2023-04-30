@@ -13,6 +13,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(storedToken)
   const [isAuthenticated, setIsAuthenticated] = useState(Boolean(storedToken))
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const storedToken = localStorage.getItem("userToken")
@@ -28,11 +29,15 @@ export function AuthProvider({ children }) {
         .then(response => {
           setUser(response.data)
           console.log("Fetched user profile:", response.data)
+          setLoading(false)
         })
         .catch(error => {
           console.error("Error fetching user profile:", error)
           localStorage.removeItem("userToken")
+          setLoading(false)
         })
+    } else {
+      setLoading(false)
     }
   }, [])
 
@@ -82,6 +87,7 @@ export function AuthProvider({ children }) {
     login,
     logout,
     register,
+    loading,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

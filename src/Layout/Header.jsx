@@ -1,6 +1,7 @@
 import React from "react"
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material"
-import { Link } from "react-router-dom"
+import { Link as RouterLink, Link } from "react-router-dom"
+
 import { useAuth } from "../contexts/AuthContext"
 
 export default function Header() {
@@ -18,8 +19,16 @@ export default function Header() {
         </Box>
         {isAuthenticated ? (
           <>
-            <Button color="inherit">Add a Service</Button>
-            <Button color="inherit">Services</Button>
+            <Button color="inherit" component={RouterLink} to="/">
+              Home
+            </Button>
+
+            <Button color="inherit" component={RouterLink} to="/add-service">
+              Add a Service
+            </Button>
+            <Button color="inherit" component={RouterLink} to="/services">
+              Services
+            </Button>
             <Button color="inherit" onClick={logout}>
               Logout
             </Button>
