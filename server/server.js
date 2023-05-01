@@ -3,15 +3,15 @@ const express = require("express")
 const cors = require("cors")
 const { Pool } = require("pg")
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 
 const app = express()
 app.use(express.json())
 app.use(cors())
-const jwt = require("jsonwebtoken")
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL })
 
-function requireAuth(req, res, next) {
+async function requireAuth(req, res, next) {
   console.log("Inside requireAuth")
   const authHeader = req.headers.authorization
   if (!authHeader) {
@@ -38,7 +38,35 @@ function requireAuth(req, res, next) {
   }
 }
 
-console.log("JWT_SECRET:", process.env.JWT_SECRET)
+app.post("/api/services", requireAuth, async (req, res) => {
+  const { jobType, ratePerHour, contactInfo } = req.body
+  const user_id = req.userId
+
+  try {
+    await pool.query(
+      "INSERT INTO services (user_id, category, title, description, price) VALUES ($1, $2, $3, $4, $5)",
+      [user_id, jobType, "Title Placeholder", contactInfo, ratePerHour]
+    )
+    res.status(201).json({ message: "Service added successfully" })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: "Error adding service" })
+  }
+})
+
+app.get("/api/services", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM services")
+    res.status(200).json(result.rows)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: "Error fetching services" })
+  }
+})
+
+app.get("/api/test", (req, res) => {
+  res.status(200).json({ message: "Test route is working!" })
+})
 
 app.post("/api/register", async (req, res) => {
   const { firstName, lastName, email, password } = req.body
