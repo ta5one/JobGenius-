@@ -15,6 +15,7 @@ async function requireAuth(req, res, next) {
   console.log("Inside requireAuth")
   const authHeader = req.headers.authorization
   if (!authHeader) {
+    console.log("No auth header")
     return res.status(401).json("No authorization header provided")
   }
 
@@ -22,6 +23,7 @@ async function requireAuth(req, res, next) {
   console.log("Received token in requireAuth:", token)
 
   if (!token) {
+    console.log("Invalid token")
     return res.status(401).json("Invalid token")
   }
 
@@ -152,6 +154,35 @@ app.get("/api/profile", requireAuth, async (req, res) => {
   } catch (err) {
     console.error(err.message)
     res.status(500).json("Server error")
+  }
+})
+
+app.delete("/api/services/:id", requireAuth, async (req, res) => {
+  try {
+    const serviceId = req.params.id
+    const userId = req.userId
+
+    const serviceResult = await pool.query(
+      "SELECT * FROM services WHERE id = $1",
+      [serviceId]
+    )
+    const service = serviceResult.rows[0]
+
+    if (!service) {
+      return res.status(404).json({ error: "Service not found." })
+    }
+    if (parseInt(service.user_id) !== parseInt(userId)) {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to delete this service." })
+    }
+
+    await pool.query("DELETE FROM services WHERE id = $1", [serviceId])
+
+    res.status(204).send()
+  } catch (error) {
+    console.error("Error deleting service:", error)
+    res.status(500).json({ error: "Internal server error." })
   }
 })
 

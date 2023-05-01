@@ -16,7 +16,7 @@ import { useAuth } from "../contexts/AuthContext"
 
 const Services = () => {
   const [services, setServices] = useState([])
-  const { user } = useAuth()
+  const { user, token } = useAuth()
 
   console.log("Logged-in user:", user)
 
@@ -61,7 +61,27 @@ const Services = () => {
   }
 
   const handleDelete = async serviceId => {
-    // Implement the delete functionality here
+    try {
+      console.log("user.token:", token)
+      const response = await fetch(
+        `http://localhost:8080/api/services/${serviceId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error("Failed to delete service.")
+      }
+
+      setServices(services.filter(service => service.id !== serviceId))
+    } catch (error) {
+      console.error("Error deleting service:", error)
+    }
   }
 
   const handleEdit = serviceId => {
@@ -130,7 +150,7 @@ const Services = () => {
                       <Typography variant="body1">
                         {service.contactInfo}
                       </Typography>
-                      {user && user.id === service.userId && (
+                      {user && user.id === service.user_id && (
                         <>
                           <Button
                             variant="contained"
