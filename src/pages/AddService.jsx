@@ -14,6 +14,7 @@ import {
 import Header from "../Layout/Header"
 import Footer from "../Layout/Footer"
 import { useAuth } from "../contexts/AuthContext"
+import { useNavigate } from "react-router-dom"
 
 const jobTypes = [
   "Plumber",
@@ -30,6 +31,7 @@ const jobTypes = [
 
 const AddService = () => {
   const { isAuthenticated, token } = useAuth()
+  const navigate = useNavigate()
   const [service, setService] = useState({
     jobType: "",
     ratePerHour: "",
@@ -63,6 +65,7 @@ const AddService = () => {
 
       if (response.ok) {
         console.log("Service added successfully")
+        navigate("/services")
       } else {
         console.log("Error adding service")
       }

@@ -32,7 +32,7 @@ async function requireAuth(req, res, next) {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     console.log("Decoded JWT payload in requireAuth:", decoded)
-    req.userId = decoded.userId
+    req.user = { id: decoded.userId }
     next()
   } catch (err) {
     console.error(err.message)
@@ -42,7 +42,7 @@ async function requireAuth(req, res, next) {
 
 app.post("/api/services", requireAuth, async (req, res) => {
   const { jobType, ratePerHour, contactInfo } = req.body
-  const user_id = req.userId
+  const user_id = req.user.id
 
   try {
     await pool.query(
@@ -140,7 +140,7 @@ app.get("/api/profile", requireAuth, async (req, res) => {
   console.log("Inside /api/profile")
   try {
     const user = await pool.query("SELECT * FROM users WHERE id = $1", [
-      req.userId,
+      req.user.id,
     ])
 
     if (!user.rows[0]) {
@@ -160,7 +160,7 @@ app.get("/api/profile", requireAuth, async (req, res) => {
 app.delete("/api/services/:id", requireAuth, async (req, res) => {
   try {
     const serviceId = req.params.id
-    const userId = req.userId
+    const userId = req.user.id
 
     const serviceResult = await pool.query(
       "SELECT * FROM services WHERE id = $1",
@@ -183,6 +183,28 @@ app.delete("/api/services/:id", requireAuth, async (req, res) => {
   } catch (error) {
     console.error("Error deleting service:", error)
     res.status(500).json({ error: "Internal server error." })
+  }
+})
+
+app.put("/api/services/:id", requireAuth, async (req, res) => {
+  console.log("req.user:", req.user)
+  const serviceId = req.params.id
+  const { category, description, price } = req.body
+
+  try {
+    const result = await pool.query(
+      "UPDATE services SET category = $1, description = $2, price = $3 WHERE id = $4 AND user_id = $5 RETURNING *",
+      [category, description, price, serviceId, req.user.id]
+    )
+
+    if (result.rowCount === 0) {
+      res.status(404).json({ error: "Service not found or not owned by user." })
+    } else {
+      res.json(result.rows[0])
+    }
+  } catch (error) {
+    console.error("Error updating service:", error)
+    res.status(500).json({ error: "Failed to update service." })
   }
 })
 
