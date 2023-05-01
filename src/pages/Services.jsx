@@ -16,6 +16,7 @@ import { useAuth } from "../contexts/AuthContext"
 
 const Services = () => {
   const [services, setServices] = useState([])
+  const [editingService, setEditingService] = useState(null)
   const { user, token } = useAuth()
 
   console.log("Logged-in user:", user)
@@ -85,7 +86,47 @@ const Services = () => {
   }
 
   const handleEdit = serviceId => {
-    // Implement the edit functionality here
+    const serviceToEdit = services.find(service => service.id === serviceId)
+    setEditingService(serviceToEdit)
+  }
+
+  const handleUpdate = async event => {
+    event.preventDefault()
+    console.log("Editing service:", editingService)
+
+    try {
+      editingService.price = parseFloat(editingService.price)
+      const response = await fetch(
+        `http://localhost:8080/api/services/${editingService.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(editingService),
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error("Failed to update service.")
+      }
+
+      const updatedService = await response.json()
+      setServices(
+        services.map(service =>
+          service.id === updatedService.id ? updatedService : service
+        )
+      )
+      setEditingService(null)
+    } catch (error) {
+      console.error("Error updating service:", error)
+    }
+  }
+
+  const handleChange = event => {
+    const { name, value } = event.target
+    setEditingService(prevState => ({ ...prevState, [name]: value }))
   }
 
   return (
@@ -174,6 +215,42 @@ const Services = () => {
               )
             })}
           </Grid>
+          {editingService && (
+            <form onSubmit={handleUpdate}>
+              <h3>Edit Service</h3>
+              <label>
+                Category:
+                <input
+                  type="text"
+                  name="category"
+                  value={editingService.category}
+                  onChange={handleChange}
+                />
+              </label>
+              <label>
+                Description:
+                <input
+                  type="text"
+                  name="description"
+                  value={editingService.description}
+                  onChange={handleChange}
+                />
+              </label>
+              <label>
+                Price:
+                <input
+                  type="number"
+                  name="price"
+                  value={editingService.price}
+                  onChange={handleChange}
+                />
+              </label>
+              <button type="submit">Update</button>
+              <button type="button" onClick={() => setEditingService(null)}>
+                Cancel
+              </button>
+            </form>
+          )}
         </Container>
       </Box>
       <Footer />
