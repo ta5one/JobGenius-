@@ -16,39 +16,34 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    console.log("Token updated:", token)
+  }, [token])
+
+  useEffect(() => {
     const storedToken = localStorage.getItem("userToken")
+    const storedUser = localStorage.getItem("user")
+
     console.log("Stored token:", localStorage.getItem("userToken"))
 
-    if (storedToken) {
+    if (storedToken && storedUser) {
       setToken(storedToken)
-      console.log("Sending request to /api/profile with token:", storedToken)
-      axios
-        .get("http://localhost:8080/api/profile", {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        })
-        .then(response => {
-          setUser(response.data)
-          console.log("Fetched user profile:", response.data)
-          setLoading(false)
-        })
-        .catch(error => {
-          console.error("Error fetching user profile:", error)
-          localStorage.removeItem("userToken")
-          setLoading(false)
-        })
-    } else {
-      setLoading(false)
+      setUser(JSON.parse(storedUser))
+      setIsAuthenticated(true)
     }
+
+    setLoading(false)
   }, [])
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post("/api/login", {
+      const response = await axios.post("http://localhost:8080/api/login", {
         email,
         password,
       })
 
       localStorage.setItem("userToken", response.data.token)
+      console.log("Token being saved:", response.data.token)
+      localStorage.setItem("user", JSON.stringify(response.data.user))
       setToken(response.data.token)
       setIsAuthenticated(true)
 
@@ -88,6 +83,7 @@ export function AuthProvider({ children }) {
     logout,
     register,
     loading,
+    token,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -13,6 +13,7 @@ import {
 } from "@mui/material"
 import Header from "../Layout/Header"
 import Footer from "../Layout/Footer"
+import { useAuth } from "../contexts/AuthContext"
 
 const jobTypes = [
   "Plumber",
@@ -28,6 +29,7 @@ const jobTypes = [
 ]
 
 const AddService = () => {
+  const { isAuthenticated, token } = useAuth()
   const [service, setService] = useState({
     jobType: "",
     ratePerHour: "",
@@ -38,9 +40,35 @@ const AddService = () => {
     setService({ ...service, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
-    console.log(service)
+
+    if (!isAuthenticated) {
+      console.log("User is not authenticated")
+      return
+    }
+
+    console.log("Token in handleSubmit:", token)
+
+    try {
+      console.log("Token before making the API call:", token)
+      const response = await fetch("http://localhost:8080/api/services", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(service),
+      })
+
+      if (response.ok) {
+        console.log("Service added successfully")
+      } else {
+        console.log("Error adding service")
+      }
+    } catch (error) {
+      console.error("Error:", error)
+    }
   }
 
   return (
