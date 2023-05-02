@@ -201,6 +201,7 @@ const Services = () => {
                 user_id,
                 first_name,
                 last_name,
+                email,
               } = service
               //console.log("Service:", service)
               return (
@@ -213,7 +214,7 @@ const Services = () => {
                   sx={{ marginTop: "5%" }}
                 >
                   <Box onClick={() => handleOpenModal(service.id)}>
-                    <Card>
+                    <Card style={{ height: "500px", overflow: "auto" }}>
                       <CardMedia
                         component="img"
                         height="140"
@@ -258,12 +259,10 @@ const Services = () => {
                               onClick={() => handleDelete(service.id)}
                               size="small"
                               sx={{
-                                backgroundColor: "red",
+                                backgroundColor: "#FF0000",
                                 marginTop: "50px",
                                 "&:hover": {
-                                  backgroundColor: "red",
-                                  boxShadow:
-                                    "0 0 10px 3px rgba(255, 0, 0, 0.2)",
+                                  backgroundColor: "#cb0000",
                                 },
                               }}
                             >
@@ -361,6 +360,9 @@ const Services = () => {
             </Typography>
             <Typography variant="body1">
               Name: {editingService.first_name} {editingService.last_name}
+            </Typography>
+            <Typography variant="body1">
+              Email: {editingService.email}
             </Typography>
 
             <Box

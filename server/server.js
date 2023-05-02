@@ -59,7 +59,7 @@ app.post("/api/services", requireAuth, async (req, res) => {
 app.get("/api/services", async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT services.*, users.first_name, users.last_name
+      SELECT services.*, users.first_name, users.last_name, users.email
       FROM services
       JOIN users ON services.user_id = users.id
     `)
@@ -197,7 +197,14 @@ app.put("/api/services/:id", requireAuth, async (req, res) => {
 
   try {
     const result = await pool.query(
-      "UPDATE services SET category = $1, description = $2, price = $3 WHERE id = $4 AND user_id = $5 RETURNING *",
+      `
+      UPDATE services SET category = $1, description = $2, price = $3
+      WHERE id = $4 AND user_id = $5
+      RETURNING *,
+      (SELECT email FROM users WHERE id = $5) AS email,
+      (SELECT first_name FROM users WHERE id = $5) AS first_name,
+      (SELECT last_name FROM users WHERE id = $5) AS last_name
+    `,
       [category, description, price, serviceId, req.user.id]
     )
 
