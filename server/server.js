@@ -58,7 +58,11 @@ app.post("/api/services", requireAuth, async (req, res) => {
 
 app.get("/api/services", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM services")
+    const result = await pool.query(`
+      SELECT services.*, users.first_name, users.last_name
+      FROM services
+      JOIN users ON services.user_id = users.id
+    `)
     res.status(200).json(result.rows)
   } catch (error) {
     console.error(error)

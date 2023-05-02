@@ -8,7 +8,9 @@ import {
   Container,
   Box,
   Button,
+  Modal,
 } from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
 import Header from "../Layout/Header"
 import Footer from "../Layout/Footer"
 import { useAuth } from "../contexts/AuthContext"
@@ -17,6 +19,7 @@ const Services = () => {
   const [services, setServices] = useState([])
   const [editingService, setEditingService] = useState(null)
   const { user, token } = useAuth()
+  const [openModal, setOpenModal] = useState(false)
 
   //   console.log("Logged-in user:", user)
 
@@ -60,6 +63,17 @@ const Services = () => {
     return imageMap[category] || "https://placehold.co/600x400"
   }
 
+  const handleOpenModal = serviceId => {
+    const serviceToEdit = services.find(service => service.id === serviceId)
+    setEditingService(serviceToEdit)
+    setOpenModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false)
+    setEditingService(null)
+  }
+
   const handleDelete = async serviceId => {
     try {
       console.log("user.token:", token)
@@ -84,7 +98,8 @@ const Services = () => {
     }
   }
 
-  const handleEdit = serviceId => {
+  const handleEdit = (serviceId, e) => {
+    e.stopPropagation()
     const serviceToEdit = services.find(service => service.id === serviceId)
     setEditingService(serviceToEdit)
   }
@@ -159,9 +174,28 @@ const Services = () => {
             Services Offered
           </Typography>
         </Box>
-        <Container maxWidth="false" disableGutters sx={{ marginBottom: "5%" }}>
+        <Container
+          maxWidth="false"
+          disableGutters
+          sx={{
+            marginBottom: "5%",
+            backgroundColor: "#f5f5f5",
+            marginTop: "5%",
+            paddingBottom: "100px",
+          }}
+        >
           <Grid container spacing={4}>
             {services.map(service => {
+              const {
+                id,
+                category,
+                description,
+                price,
+                contactInfo,
+                user_id,
+                first_name,
+                last_name,
+              } = service
               //console.log("Service:", service)
               return (
                 <Grid
@@ -172,70 +206,73 @@ const Services = () => {
                   md={4}
                   sx={{ marginTop: "5%" }}
                 >
-                  <Card>
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={getCategoryImage(service.category)}
-                      sx={{
-                        paddingTop: "10px",
-                        paddingRight: "20px",
-                      }}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {service.category} - ${service.price}
-                        /hour
-                      </Typography>
-                      <Typography variant="subtitle1">
-                        {service.description}
-                      </Typography>
-                      <Typography variant="body1">
-                        {service.contactInfo}
-                      </Typography>
-                      {user && user.id === service.user_id && (
-                        <>
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => handleEdit(service.id)}
-                            size="small"
-                            sx={{
-                              marginRight: "10px",
-                              marginTop: "50px",
-                              backgroundColor: "#4caf50",
-                              "&:hover": {
-                                backgroundColor: "#016e03",
-                              },
-                            }}
-                          >
-                            Edit
-                          </Button>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            onClick={() => handleDelete(service.id)}
-                            size="small"
-                            sx={{
-                              backgroundColor: "red",
-                              marginTop: "50px",
-                              "&:hover": {
+                  <Box onClick={() => handleOpenModal(service.id)}>
+                    <Card>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={getCategoryImage(service.category)}
+                        sx={{
+                          paddingTop: "10px",
+                          paddingRight: "20px",
+                        }}
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {service.category} - ${service.price}
+                          /hour
+                        </Typography>
+                        <Typography variant="subtitle1">
+                          {service.description}
+                        </Typography>
+                        <Typography variant="body1">
+                          {service.contactInfo}
+                        </Typography>
+                        {user && user.id === service.user_id && (
+                          <>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={e => handleEdit(service.id, e)}
+                              size="small"
+                              sx={{
+                                marginRight: "10px",
+                                marginTop: "50px",
+                                backgroundColor: "#4caf50",
+                                "&:hover": {
+                                  backgroundColor: "#016e03",
+                                },
+                              }}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => handleDelete(service.id)}
+                              size="small"
+                              sx={{
                                 backgroundColor: "red",
-                                boxShadow: "0 0 10px 3px rgba(255, 0, 0, 0.2)",
-                              },
-                            }}
-                          >
-                            Delete
-                          </Button>
-                        </>
-                      )}
-                    </CardContent>
-                  </Card>
+                                marginTop: "50px",
+                                "&:hover": {
+                                  backgroundColor: "red",
+                                  boxShadow:
+                                    "0 0 10px 3px rgba(255, 0, 0, 0.2)",
+                                },
+                              }}
+                            >
+                              Delete
+                            </Button>
+                          </>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </Box>
                 </Grid>
               )
             })}
           </Grid>
-          {editingService && (
+          {editingService && user && user.id === editingService.user_id && (
             <form onSubmit={handleUpdate}>
               <h3>Edit Service</h3>
               <label>
@@ -273,6 +310,100 @@ const Services = () => {
           )}
         </Container>
       </Box>
+      {editingService && (
+        <Modal
+          open={openModal}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-service-details"
+          aria-describedby="modal-service-description"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+            }}
+          >
+            <Typography id="modal-service-details" variant="h6" component="h2">
+              {editingService.category}
+            </Typography>
+            <Typography id="modal-service-description" variant="body1">
+              {editingService.description}
+            </Typography>
+            <Typography variant="body1">
+              Price per hour: ${editingService.price}
+            </Typography>
+            <Typography variant="body1">
+              Name: {editingService.first_name} {editingService.last_name}
+            </Typography>
+
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+                mt: 2,
+              }}
+            >
+              <Button
+                color="error"
+                size="small"
+                onClick={handleCloseModal}
+                startIcon={<CloseIcon />}
+              >
+                Close
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
+      )}
+      <Grid
+        container
+        spacing={2}
+        justifyContent="space-between"
+        sx={{ marginTop: "50px", marginBottom: "50px" }}
+      >
+        <Grid item xs={12} sm={6}>
+          <Typography variant="h4" gutterBottom sx={{ textAlign: "start" }}>
+            Why Choosing A Certified Professional is Better
+          </Typography>
+          <Typography variant="body1" paragraph sx={{ textAlign: "start" }}>
+            One of the key advantages of using JobGenius to hire a certified
+            professional for your service needs is the peace of mind that comes
+            with knowing that you are working with a trained and experienced
+            expert. While it may be tempting to attempt a DIY approach,
+            especially if you're trying to save some money, the risks and
+            potential complications of taking on a project yourself can quickly
+            outweigh any potential savings.
+          </Typography>
+          <Typography variant="body1" paragraph sx={{ textAlign: "start" }}>
+            By choosing a certified professional on JobGenius, you can be
+            confident that the person you hire has the necessary knowledge,
+            training, and experience to get the job done right. From plumbers
+            and electricians to carpenters and painters, each service provider
+            on the platform is thoroughly vetted and background-checked to
+            ensure that they meet the highest standards of quality and
+            professionalism.
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/Mw97K_qf9JU"
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </Grid>
+      </Grid>
+
       <Footer />
     </>
   )
