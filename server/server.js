@@ -117,7 +117,7 @@ app.post("/api/login", async (req, res) => {
       { userId: user.rows[0].id },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1h",
+        expiresIn: "24h",
       }
     )
     console.log("Generated token:", token)
@@ -205,6 +205,48 @@ app.put("/api/services/:id", requireAuth, async (req, res) => {
   } catch (error) {
     console.error("Error updating service:", error)
     res.status(500).json({ error: "Failed to update service." })
+  }
+})
+
+app.get("/api/categories", async (req, res) => {
+  const searchTerm = req.query.query
+  try {
+    const result = await pool.query(
+      "SELECT DISTINCT category FROM services WHERE category ILIKE $1",
+      [`%${searchTerm}%`]
+    )
+    res.status(200).json(result.rows)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: "Error fetching categories" })
+  }
+})
+
+app.get("/api/search", async (req, res) => {
+  const searchTerm = req.query.query
+  try {
+    const result = await pool.query(
+      "SELECT * FROM services WHERE category ILIKE $1",
+      [`%${searchTerm}%`]
+    )
+    res.status(200).json(result.rows)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: "Error fetching search results" })
+  }
+})
+
+app.get("/api/suggestions", async (req, res) => {
+  const searchTerm = req.query.query
+  try {
+    const result = await pool.query(
+      "SELECT DISTINCT category FROM services WHERE category ILIKE $1",
+      [`%${searchTerm}%`]
+    )
+    res.status(200).json(result.rows)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: "Error fetching suggestions" })
   }
 })
 

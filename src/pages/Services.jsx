@@ -9,7 +9,6 @@ import {
   Box,
   Button,
 } from "@mui/material"
-import backgroundImage from "../assets/images/mountain.jpg"
 import Header from "../Layout/Header"
 import Footer from "../Layout/Footer"
 import { useAuth } from "../contexts/AuthContext"
@@ -19,7 +18,7 @@ const Services = () => {
   const [editingService, setEditingService] = useState(null)
   const { user, token } = useAuth()
 
-  console.log("Logged-in user:", user)
+  //   console.log("Logged-in user:", user)
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -137,7 +136,7 @@ const Services = () => {
           sx={{
             width: "100%",
             minHeight: "80vh",
-            backgroundImage: `url(${backgroundImage})`,
+            backgroundImage: `url(https://images.pexels.com/photos/325807/pexels-photo-325807.jpeg?cs=srgb&dl=pexels-dom-gould-325807.jpg&fm=jpg)`,
             backgroundPosition: "center",
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
@@ -163,7 +162,7 @@ const Services = () => {
         <Container maxWidth="false" disableGutters sx={{ marginBottom: "5%" }}>
           <Grid container spacing={4}>
             {services.map(service => {
-              console.log("Service:", service)
+              //console.log("Service:", service)
               return (
                 <Grid
                   item
@@ -178,7 +177,10 @@ const Services = () => {
                       component="img"
                       height="140"
                       image={getCategoryImage(service.category)}
-                      sx={{ padding: "5px" }}
+                      sx={{
+                        paddingTop: "10px",
+                        paddingRight: "20px",
+                      }}
                     />
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="div">
@@ -197,6 +199,15 @@ const Services = () => {
                             variant="contained"
                             color="primary"
                             onClick={() => handleEdit(service.id)}
+                            size="small"
+                            sx={{
+                              marginRight: "10px",
+                              marginTop: "50px",
+                              backgroundColor: "#4caf50",
+                              "&:hover": {
+                                backgroundColor: "#016e03",
+                              },
+                            }}
                           >
                             Edit
                           </Button>
@@ -204,6 +215,15 @@ const Services = () => {
                             variant="contained"
                             color="secondary"
                             onClick={() => handleDelete(service.id)}
+                            size="small"
+                            sx={{
+                              backgroundColor: "red",
+                              marginTop: "50px",
+                              "&:hover": {
+                                backgroundColor: "red",
+                                boxShadow: "0 0 10px 3px rgba(255, 0, 0, 0.2)",
+                              },
+                            }}
                           >
                             Delete
                           </Button>

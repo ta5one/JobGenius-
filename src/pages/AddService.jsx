@@ -139,6 +139,14 @@ const AddService = () => {
                   fullWidth
                   variant="contained"
                   color="primary"
+                  sx={{
+                    marginRight: "10px",
+                    marginTop: "50px",
+                    backgroundColor: "#4caf50",
+                    "&:hover": {
+                      backgroundColor: "#016e03",
+                    },
+                  }}
                 >
                   Submit
                 </Button>
