@@ -9,7 +9,13 @@ import {
   Box,
   Button,
   Modal,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  DialogActions,
 } from "@mui/material"
+
 import CloseIcon from "@mui/icons-material/Close"
 import Header from "../Layout/Header"
 import Footer from "../Layout/Footer"
@@ -273,40 +279,54 @@ const Services = () => {
             })}
           </Grid>
           {editingService && user && user.id === editingService.user_id && (
-            <form onSubmit={handleUpdate}>
-              <h3>Edit Service</h3>
-              <label>
-                Category:
-                <input
-                  type="text"
-                  name="category"
-                  value={editingService.category}
-                  onChange={handleChange}
-                />
-              </label>
-              <label>
-                Description:
-                <input
-                  type="text"
-                  name="description"
-                  value={editingService.description}
-                  onChange={handleChange}
-                />
-              </label>
-              <label>
-                Price:
-                <input
-                  type="number"
-                  name="price"
-                  value={editingService.price}
-                  onChange={handleChange}
-                />
-              </label>
-              <button type="submit">Update</button>
-              <button type="button" onClick={() => setEditingService(null)}>
-                Cancel
-              </button>
-            </form>
+            <Dialog
+              open={!!editingService}
+              onClose={() => setEditingService(null)}
+            >
+              <DialogTitle>Edit Service</DialogTitle>
+              <DialogContent>
+                <form onSubmit={handleUpdate}>
+                  <TextField
+                    fullWidth
+                    margin="normal"
+                    label="Category"
+                    name="category"
+                    value={editingService.category}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    fullWidth
+                    margin="normal"
+                    label="Description"
+                    name="description"
+                    value={editingService.description}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    fullWidth
+                    margin="normal"
+                    label="Price"
+                    name="price"
+                    type="number"
+                    value={editingService.price}
+                    onChange={handleChange}
+                  />
+                  <DialogActions>
+                    <Button type="submit" color="primary" variant="contained">
+                      Update
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={() => setEditingService(null)}
+                      color="secondary"
+                      variant="outlined"
+                    >
+                      Cancel
+                    </Button>
+                  </DialogActions>
+                </form>
+              </DialogContent>
+            </Dialog>
           )}
         </Container>
       </Box>

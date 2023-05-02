@@ -30,6 +30,7 @@ export default function Homepage() {
   const [searchResults, setSearchResults] = useState([])
   const [suggestions, setSuggestions] = useState([])
   const [categories, setCategories] = useState([])
+  const [rating, setRating] = useState(5)
 
   const jobTypes = [
     "Plumber",
@@ -81,6 +82,10 @@ export default function Homepage() {
     }
   }
 
+  const handleRatingChange = (event, newValue) => {
+    setRating(newValue)
+  }
+
   const fetchSuggestions = async query => {
     if (!query.trim()) {
       setSuggestions([])
@@ -125,7 +130,7 @@ export default function Homepage() {
             backgroundColor: "rgba(0, 0, 0, 0.3)",
           }}
         >
-          Find the right service, right away
+          Service made easy, with JobGenius
         </Typography>
         <Box
           sx={{
@@ -386,28 +391,41 @@ export default function Homepage() {
           Customer Reviews
         </Typography>
         <Grid container spacing={2} justifyContent="center">
-          {Array.from({ length: 3 }, (_, i) => (
-            <Grid item xs={12} sm={4} key={i}>
+          {[
+            {
+              id: 1,
+              name: "Misty Rose",
+              avatar:
+                "https://cdn.pixabay.com/photo/2022/03/04/06/00/fashion-model-7046626_960_720.jpg",
+              review:
+                "JobGenius connected me with a fantastic graphic designer who helped me revamp my business logo. The communication was seamless, and the final product exceeded my expectations. I'm thrilled with the results and will definitely use JobGenius again!",
+            },
+            {
+              id: 2,
+              name: "John Doe",
+              avatar:
+                "https://cdn.pixabay.com/photo/2022/08/06/11/02/black-man-7368408_960_720.jpg",
+              review:
+                "I've been using JobGenius for various projects for my company, and I am consistently impressed by the quality of service providers I've been able to connect with. The platform is easy to navigate, and the support team is always ready to assist. Highly recommended!",
+            },
+            {
+              id: 3,
+              name: "Lucy Brown",
+              avatar:
+                "https://cdn.pixabay.com/photo/2016/06/15/23/20/woman-1460150_960_720.jpg",
+              review:
+                "As a small business owner, I always struggled to find reliable freelancers. JobGenius changed that for me. I found a talented web developer who revamped my website, and the whole process was smooth and efficient. I'll definitely use JobGenius for future projects.",
+            },
+          ].map(({ id, name, avatar, review }) => (
+            <Grid item xs={12} sm={4} key={id}>
               <Card>
                 <CardHeader
-                  avatar={
-                    <Avatar
-                      src={`https://via.placeholder.com/150?text=Avatar+${
-                        i + 1
-                      }`}
-                      alt={`Reviewer ${i + 1}`}
-                    />
-                  }
-                  title={`Reviewer ${i + 1}`}
+                  avatar={<Avatar src={avatar} alt={name} />}
+                  title={name}
                 />
                 <CardContent>
-                  <Rating value={5} readOnly />
-                  <Typography variant="body1">
-                    My experience with JobGenius was fantastic! I found the
-                    perfect service provider for my needs and the whole process
-                    was smooth and hassle-free. I highly recommend JobGenius to
-                    anyone looking for quality services.
-                  </Typography>
+                  <Rating value={rating} onChange={handleRatingChange} />
+                  <Typography variant="body1">{review}</Typography>
                 </CardContent>
               </Card>
             </Grid>
