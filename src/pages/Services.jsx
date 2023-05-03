@@ -214,7 +214,7 @@ const Services = () => {
                   sx={{ marginTop: "5%" }}
                 >
                   <Box onClick={() => handleOpenModal(service.id)}>
-                    <Card style={{ height: "500px", overflow: "auto" }}>
+                    <Card style={{ height: "600px", overflow: "auto" }}>
                       <CardMedia
                         component="img"
                         height="140"
