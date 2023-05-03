@@ -39,14 +39,17 @@ Trello: https://trello.com/b/ihiHjWM9/plan
 ## Demo
 
 Home:
+
 ![JobGenius demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGVjYjA0M2EwNzcxYmZhMDg0OTVkMDNkM2FjM2Y2YjI5MmQ1MjI0MyZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/2uZdq59rNT5vFTDiut/giphy.gif)
 
 Login/Signup:
+
 ![JobGenius demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhhM2Y1ZmFmMGJjZDY0YzIxODM0MWU4NTU2NmZmYzQ0ZmYzYmQ5YSZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/7IsxWHjUMpUdrK4kp6/giphy.gif)
 
 Add a Service:
 Only when user is logged in and can only delete/edit
 a service if you're the one posting it.
+
 ![JobGenius demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDAwYjhjOTA1NjU4NmUwNzIzODRiNDE1MzRiZTljNGIwZGIzYmJiOSZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/uTPZMtGdvFuevSXVJW/giphy.gif)
 
 ## Installation
